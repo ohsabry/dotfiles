@@ -16,4 +16,6 @@ alias note='touch $(date "+%Y_%m_%d.md")'
 alias cat='bat'
 alias ls="exa -lah"
 
+alias p8="cd ~/Library/Application\ Support/pico-8/carts"
+
 alias nvmn='[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"'
