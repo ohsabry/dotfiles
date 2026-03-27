@@ -1,0 +1,65 @@
+format = """
+[\\[](dimmed white)\
+$username\
+[:](dimmed white)\
+$directory\
+[\\]](dimmed white)\
+$git_branch\
+$git_status\
+$nodejs\
+$python\
+$golang\
+$ruby\
+$cmd_duration\
+$character"""
+
+[username]
+show_always = true
+format = "[$user]($style)"
+style_user = "bold cyan"
+style_root = "bold red"
+
+[character]
+success_symbol = "[\\$](yellow) "
+error_symbol = "[\\$](red) "
+
+[directory]
+truncation_length = 3
+truncation_symbol = ".../"
+style = "red"
+format = "[$path]($style)"
+
+[git_branch]
+format = " [\\[](green)[$branch](green)"
+truncation_length = 24
+
+[git_status]
+format = "[$all_status](red)[\\]](green) "
+ahead = "+"
+behind = "-"
+diverged = "+-"
+modified = "*"
+
+[cmd_duration]
+min_time = 2_000
+format = "[$duration](dimmed white) "
+
+[nodejs]
+format = "[$symbol$version]($style) "
+symbol = "node:"
+style = "green"
+
+[python]
+format = "[$symbol$version]($style) "
+symbol = "py:"
+style = "yellow"
+
+[golang]
+format = "[$symbol$version]($style) "
+symbol = "go:"
+style = "cyan"
+
+[ruby]
+format = "[$symbol$version]($style) "
+symbol = "rb:"
+style = "red"
