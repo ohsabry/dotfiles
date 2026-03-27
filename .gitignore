@@ -1,7 +1,4 @@
 .DS_Store
 *.local
 *.local.*
-
-python/ipython.symlink/profile_default/db/
-python/ipython.symlink/profile_default/history.sqlite
-python/ipython.symlink/profile_default/startup/README
+.claude/

@@ -1,0 +1,38 @@
+{
+  "Profiles": [
+    {
+      "Name": "Catppuccin Mocha",
+      "Guid": "catppuccin-mocha-dotfiles",
+      "Normal Font": "JetBrainsMonoNFM-Regular 20",
+      "Use Non-ASCII Font": false,
+      "Transparency": 0,
+      "Columns": 120,
+      "Rows": 36,
+      "Scrollback Lines": 50000,
+      "Unlimited Scrollback": false,
+      "Foreground Color": { "Red Component": 0.804, "Green Component": 0.839, "Blue Component": 0.957 },
+      "Background Color": { "Red Component": 0.118, "Green Component": 0.118, "Blue Component": 0.180 },
+      "Bold Color": { "Red Component": 0.804, "Green Component": 0.839, "Blue Component": 0.957 },
+      "Cursor Color": { "Red Component": 0.961, "Green Component": 0.878, "Blue Component": 0.863 },
+      "Cursor Text Color": { "Red Component": 0.118, "Green Component": 0.118, "Blue Component": 0.180 },
+      "Selection Color": { "Red Component": 0.345, "Green Component": 0.357, "Blue Component": 0.439 },
+      "Selected Text Color": { "Red Component": 0.804, "Green Component": 0.839, "Blue Component": 0.957 },
+      "Ansi 0 Color": { "Red Component": 0.271, "Green Component": 0.278, "Blue Component": 0.353 },
+      "Ansi 1 Color": { "Red Component": 0.953, "Green Component": 0.545, "Blue Component": 0.659 },
+      "Ansi 2 Color": { "Red Component": 0.651, "Green Component": 0.890, "Blue Component": 0.631 },
+      "Ansi 3 Color": { "Red Component": 0.976, "Green Component": 0.886, "Blue Component": 0.686 },
+      "Ansi 4 Color": { "Red Component": 0.537, "Green Component": 0.706, "Blue Component": 0.980 },
+      "Ansi 5 Color": { "Red Component": 0.961, "Green Component": 0.761, "Blue Component": 0.906 },
+      "Ansi 6 Color": { "Red Component": 0.580, "Green Component": 0.886, "Blue Component": 0.835 },
+      "Ansi 7 Color": { "Red Component": 0.651, "Green Component": 0.678, "Blue Component": 0.784 },
+      "Ansi 8 Color": { "Red Component": 0.345, "Green Component": 0.357, "Blue Component": 0.439 },
+      "Ansi 9 Color": { "Red Component": 0.953, "Green Component": 0.467, "Blue Component": 0.600 },
+      "Ansi 10 Color": { "Red Component": 0.537, "Green Component": 0.847, "Blue Component": 0.545 },
+      "Ansi 11 Color": { "Red Component": 0.922, "Green Component": 0.827, "Blue Component": 0.569 },
+      "Ansi 12 Color": { "Red Component": 0.455, "Green Component": 0.659, "Blue Component": 0.988 },
+      "Ansi 13 Color": { "Red Component": 0.949, "Green Component": 0.682, "Blue Component": 0.871 },
+      "Ansi 14 Color": { "Red Component": 0.420, "Green Component": 0.843, "Blue Component": 0.792 },
+      "Ansi 15 Color": { "Red Component": 0.729, "Green Component": 0.761, "Blue Component": 0.871 }
+    }
+  ]
+}

@@ -1,21 +1,149 @@
-#!/bin/sh
+#!/bin/bash
 #
 # dot
 #
-# `dot` handles installation, updates, things like that. Run it periodically
-# to make sure you're on the latest and greatest.
-export ZSH=$HOME/code/github/dotfiles
+# Run this to install and sync everything. Run it again anytime to update.
 
-# Set macOS defaults
-$ZSH/macos/set-defaults.sh
+export ZSH="$HOME/dev/dotfiles"
 
-# Install homebrew
-$ZSH/homebrew/install.sh 2>&1
+info() { printf "  \033[00;34m›\033[0m %s\n" "$1"; }
+ok()   { printf "  \033[00;32m✓\033[0m %s\n" "$1"; }
+warn() { printf "  \033[00;33m⚠\033[0m %s\n" "$1"; }
+fail() { printf "  \033[00;31m✗\033[0m %s\n" "$1"; exit 1; }
 
-# Upgrade homebrew
-echo "› brew update"
-brew update
+# --- Homebrew ---
+info "Homebrew"
+if ! command -v brew > /dev/null 2>&1; then
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  if [ -d "/opt/homebrew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)" || fail "failed to set up homebrew environment"
+  fi
+fi
+brew update || fail "brew update failed"
+brew bundle --file="$ZSH/Brewfile" || fail "brew bundle failed"
+brew bundle cleanup --file="$ZSH/Brewfile" --force
+ok "Homebrew packages synced"
 
-# Install software
-echo "› $ZSH/script/install"
-$ZSH/script/install
+# --- macOS defaults ---
+info "macOS defaults"
+"$ZSH/macos/set-defaults.sh"
+ok "macOS defaults set"
+
+# --- mise ---
+info "mise"
+if command -v mise > /dev/null 2>&1; then
+  mise use --global node@lts || fail "mise: failed to install node"
+  mise use --global python@latest || fail "mise: failed to install python"
+  mise use --global ruby@latest || fail "mise: failed to install ruby"
+  mise use --global go@latest || fail "mise: failed to install go"
+  mise use --global deno@latest || fail "mise: failed to install deno"
+  eval "$(mise env)" || fail "mise env failed"
+  corepack enable || fail "corepack enable failed"
+  ok "mise configured (node, python, ruby)"
+else
+  fail "mise not found"
+fi
+
+# --- vim-plug ---
+info "Vim plugins"
+if [ ! -f "$HOME/.vim/autoload/plug.vim" ]; then
+  curl -fLo "$HOME/.vim/autoload/plug.vim" --create-dirs \
+    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim \
+    || fail "failed to download vim-plug"
+  ok "vim-plug installed — run 'vim +PlugInstall' to install plugins"
+else
+  ok "vim-plug present"
+fi
+
+# --- Catppuccin tmux theme ---
+info "Catppuccin tmux theme"
+TMUX_CATPPUCCIN="$HOME/.config/tmux/plugins/catppuccin/tmux"
+if [ ! -d "$TMUX_CATPPUCCIN" ]; then
+  mkdir -p "$(dirname "$TMUX_CATPPUCCIN")"
+  git clone -b v2.1.3 https://github.com/catppuccin/tmux.git "$TMUX_CATPPUCCIN" \
+    || fail "failed to clone catppuccin tmux theme"
+fi
+ok "Catppuccin tmux theme installed"
+
+# --- Starship config ---
+info "Starship prompt"
+mkdir -p "$HOME/.config"
+cp "$ZSH/starship.toml" "$HOME/.config/starship.toml" || fail "failed to copy starship config"
+ok "Starship config synced"
+
+# --- VS Code extensions ---
+info "VS Code extensions"
+if command -v code > /dev/null 2>&1; then
+  while IFS= read -r ext; do
+    if [ -n "$ext" ]; then
+      code --install-extension "$ext" --force || warn "failed to install: $ext"
+    fi
+  done < "$ZSH/vscode/extensions.txt"
+  VSCODE_DIR="$HOME/Library/Application Support/Code/User"
+  mkdir -p "$VSCODE_DIR"
+  cp "$ZSH/vscode/settings.json" "$VSCODE_DIR/settings.json" || warn "failed to copy VS Code settings"
+  ok "VS Code extensions + settings installed"
+else
+  warn "'code' not found — open VS Code > Cmd+Shift+P > 'Shell Command: Install code'"
+fi
+
+# --- iTerm2 profile ---
+info "iTerm2 profile"
+ITERM_PROFILES="$HOME/Library/Application Support/iTerm2/DynamicProfiles"
+mkdir -p "$ITERM_PROFILES"
+cp "$ZSH/iterm/catppuccin-profile.json" "$ITERM_PROFILES/catppuccin-profile.json" \
+  || fail "failed to copy iTerm profile"
+ok "iTerm2 catppuccin profile installed"
+
+# --- Git LFS ---
+if command -v git-lfs > /dev/null 2>&1; then
+  git lfs install --skip-repo > /dev/null || fail "git lfs install failed"
+  ok "Git LFS initialized"
+fi
+
+# --- Checks ---
+if command -v gh > /dev/null 2>&1; then
+  if gh auth status > /dev/null 2>&1; then
+    ok "GitHub CLI authenticated"
+  else
+    warn "run 'gh auth login'"
+  fi
+fi
+
+if [ ! -f "$HOME/.ssh/id_ed25519" ]; then
+  warn "no SSH key — run 'ssh-keygen -t ed25519'"
+fi
+
+if [ ! -f "$HOME/.localrc" ]; then
+  cat > "$HOME/.localrc" << 'LOCALRC'
+# Machine-specific config (not tracked in dotfiles)
+# This file is sourced by zshrc. Add credentials, work aliases, etc. here.
+
+# --- Paths ---
+# Override these if your setup differs from the defaults in zshrc
+# export GOPATH="$HOME/dev/go"
+
+# --- AWS ---
+# alias sso="aws-vault exec YOUR_PROFILE --"
+
+# --- npm ---
+# export NPM_TOKEN=your-npm-token
+
+# --- Jira ---
+# export JIRA_ENDPOINT=https://your-org.atlassian.net
+# export JIRA_LOGIN=your-email
+# export JIRA_PROJECT=YOUR_PROJECT
+# mkjira() {
+#   jira create --noedit --issuetype Task \
+#     --endpoint "$JIRA_ENDPOINT" --login "$JIRA_LOGIN" \
+#     --project "$JIRA_PROJECT" --override summary="$*"
+# }
+LOCALRC
+  warn "created ~/.localrc — edit it with your credentials"
+else
+  ok "~/.localrc exists"
+fi
+
+echo ""
+echo "  Done. Run 'vim +PlugInstall' if this is a fresh setup."
+echo ""

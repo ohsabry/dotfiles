@@ -1,54 +1,52 @@
 [user]
-        name = Omar Sabry
-        email = ohsabry@gmail.com
+	name = Omar Sabry
+	email = ohsabry@gmail.com
 
-[color]
-        diff = auto
-        status = auto
-        branch = auto
-	      ui = true
-        interactive = auto
-        grep = auto
-        showBranch = auto
+[init]
+	defaultBranch = main
 
 [core]
-        excludesfile = ~/.gitignore
-        editor = vim
+	excludesfile = ~/.gitignore
+	editor = vim
+	pager = delta
+
+[interactive]
+	diffFilter = delta --color-only
+
+[delta]
+	navigate = true
+	line-numbers = true
+	side-by-side = true
+	syntax-theme = Catppuccin Mocha
 
 [alias]
 	unstage = reset
 	uncommit = reset --soft HEAD^
-	mup = checkout master && git pull && git checkout -
+	mup = !git checkout $(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@') && git pull && git checkout -
 
 [pull]
-  ff = only
-  rebase = true
+	ff = only
+	rebase = true
 
 [push]
-	default = tracking
+	default = current
+	autoSetupRemote = true
 
 [fetch]
 	prune = true
 
 [github]
-    user = ohsabry
+	user = ohsabry
+
+[diff]
+	algorithm = histogram
+
+[merge]
+	conflictstyle = zdiff3
 
 [rerere]
-  enabled = 1
+	enabled = 1
 
-[color "diff-highlight"]
-	oldNormal = red bold
-	oldHighlight = red bold 52
-	newNormal = green bold
-	newHighlight = green bold 22
-
-[color "diff"]
-	meta = yellow
-	frag = magenta bold
-	commit = yellow bold
-	old = red bold
-	new = green bold
-	whitespace = red reverse
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f
