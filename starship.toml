@@ -1,7 +1,5 @@
 format = """
 [\\[](dimmed white)\
-$username\
-[:](dimmed white)\
 $directory\
 [\\]](dimmed white)\
 $git_branch\
@@ -10,18 +8,19 @@ $nodejs\
 $python\
 $golang\
 $ruby\
+$aws\
 $cmd_duration\
+$status\
 $character"""
-
-[username]
-show_always = true
-format = "[$user]($style)"
-style_user = "bold cyan"
-style_root = "bold red"
 
 [character]
 success_symbol = "[\\$](yellow) "
 error_symbol = "[\\$](red) "
+
+[status]
+disabled = false
+format = "[✘ $status]($style) "
+style = "red"
 
 [directory]
 truncation_length = 3
@@ -39,6 +38,10 @@ ahead = "+"
 behind = "-"
 diverged = "+-"
 modified = "*"
+
+[aws]
+format = "[aws:$profile]($style) "
+style = "bold yellow"
 
 [cmd_duration]
 min_time = 2_000

@@ -13,14 +13,33 @@ set -g history-limit 50000
 
 # Catppuccin theme
 set -g @catppuccin_flavor "mocha"
-run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
 
-setw -g monitor-activity on
-set -g visual-activity on
+set -g @catppuccin_window_flags "icon"
+set -g @catppuccin_window_text " #W"
+set -g @catppuccin_window_current_text " #W"
+
+set -g @catppuccin_directory_text " #{b:pane_current_path}"
+set -g @catppuccin_date_time_text " %H:%M"
+set -g status-interval 5
+
+run ~/.config/tmux/plugins/catppuccin/tmux/catppuccin.tmux
+run ~/.config/tmux/plugins/tmux-resurrect/resurrect.tmux
+
+set -g status-left "#{E:@catppuccin_status_session}"
+set -g status-right "#{E:@catppuccin_status_application}#{E:@catppuccin_status_directory}#{E:@catppuccin_status_date_time}"
+
+# Pane display
+set -g pane-border-indicators both
+set -g pane-border-lines heavy
+set -g display-panes-time 2000
+
+setw -g monitor-activity off
+set -g visual-activity off
 
 bind-key - split-window -v -c '#{pane_current_path}'
 bind-key \\ split-window -h -c '#{pane_current_path}'
 bind c new-window -c '#{pane_current_path}'
+bind-key e display-popup -d '#{pane_current_path}' -w 80% -h 80% -E
 
 set-option -g renumber-windows on
 set-option -g automatic-rename on

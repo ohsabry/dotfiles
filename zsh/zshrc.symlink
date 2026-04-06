@@ -1,7 +1,8 @@
 export LANG=en_CA.UTF-8
 export LC_ALL=en_CA.UTF-8
 
-export ZSH="$HOME/dev/dotfiles"
+export DEV_DIR="${DEV_DIR:-$HOME/dev}"
+export ZSH="$DEV_DIR/dotfiles"
 export VISUAL='vim'
 export EDITOR="$VISUAL"
 export PAGER=less
@@ -45,9 +46,8 @@ export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_DEFAULT_OPTS='--reverse'
 source <(fzf --zsh)
 
-export GOPATH="$HOME/dev/go"
+export GOPATH="${GOPATH:-$DEV_DIR/go}"
 export PATH="$PATH:$GOPATH/bin"
 
 # mise — manages node, python, ruby versions
 eval "$(mise activate zsh)"
-

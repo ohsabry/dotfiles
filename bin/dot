@@ -4,7 +4,8 @@
 #
 # Run this to install and sync everything. Run it again anytime to update.
 
-export ZSH="$HOME/dev/dotfiles"
+export DEV_DIR="${DEV_DIR:-$HOME/dev}"
+export ZSH="$DEV_DIR/dotfiles"
 
 info() { printf "  \033[00;34m›\033[0m %s\n" "$1"; }
 ok()   { printf "  \033[00;32m✓\033[0m %s\n" "$1"; }
@@ -65,6 +66,15 @@ if [ ! -d "$TMUX_CATPPUCCIN" ]; then
 fi
 ok "Catppuccin tmux theme installed"
 
+# --- tmux-resurrect ---
+info "tmux-resurrect"
+TMUX_RESURRECT="$HOME/.config/tmux/plugins/tmux-resurrect"
+if [ ! -d "$TMUX_RESURRECT" ]; then
+  git clone https://github.com/tmux-plugins/tmux-resurrect "$TMUX_RESURRECT" \
+    || fail "failed to clone tmux-resurrect"
+fi
+ok "tmux-resurrect installed"
+
 # --- Starship config ---
 info "Starship prompt"
 mkdir -p "$HOME/.config"
@@ -120,8 +130,9 @@ if [ ! -f "$HOME/.localrc" ]; then
 # This file is sourced by zshrc. Add credentials, work aliases, etc. here.
 
 # --- Paths ---
-# Override these if your setup differs from the defaults in zshrc
-# export GOPATH="$HOME/dev/go"
+# Override these if your setup differs from the defaults
+# export DEV_DIR="$HOME/projects"  # default: $HOME/dev
+# export GOPATH="$DEV_DIR/go"
 
 # --- AWS ---
 # alias sso="aws-vault exec YOUR_PROFILE --"

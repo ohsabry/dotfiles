@@ -1,6 +1,6 @@
 # dotfiles
 
-macOS development environment managed from `~/dev/dotfiles`.
+macOS development environment managed from `~/dev/dotfiles` (configurable via `$DEV_DIR`).
 
 ## Setup
 - `script/bootstrap` — fresh install (symlinks + installs everything)
